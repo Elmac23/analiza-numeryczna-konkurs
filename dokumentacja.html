@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentacja Projektu NIFS3 - Analiza Numeryczna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        nav {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .content-section {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword {
+            color: #ff79c6;
+        }
+
+        .code-block .function {
+            color: #50fa7b;
+        }
+
+        .code-block .comment {
+            color: #6272a4;
+        }
+
+        .code-block .string {
+            color: #f1fa8c;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .file-structure {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .math-notation {
+            font-style: italic;
+            font-family: 'Times New Roman', serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dokumentacja Projektu NIFS3</h1>
+            <p>Kompleksowa dokumentacja systemu interpolacji krzywych sklejanymi funkcjami wielomianowymi trzeciego stopnia</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#wprowadzenie">Wprowadzenie</a></li>
+                <li><a href="#teoria">Teoria Matematyczna</a></li>
+                <li><a href="#algorytm">Algorytm NIFS3</a></li>
+                <li><a href="#moduły">Moduły Projektu</a></li>
+                <li><a href="#użycie">Instrukcja Użycia</a></li>
+                <li><a href="#przepływ">Przepływ Danych</a></li>
+            </ul>
+        </nav>
+
+        <section id="wprowadzenie" class="content-section">
+            <h2>1. Wprowadzenie</h2>
+            
+            <h3>1.1 Opis Projektu</h3>
+            <p>Projekt NIFS3 (Natural Interpolating Function with Splines of degree 3) to zaawansowany system do interpolacji krzywych przy użyciu naturalnych funkcji sklejanych trzeciego stopnia (kubicznych spline'ów). System umożliwia tworzenie gładkich krzywych przechodzących przez zadane punkty kontrolne z zachowaniem ciągłości funkcji oraz jej pierwszych i drugich pochodnych.</p>
+
+            <div class="info-box">
+                <strong>Cel projektu:</strong> Stworzenie precyzyjnego narzędzia do rysowania krzywych metodą interpolacji kubicznymi spline'ami z optymalizacją punktów w celu minimalizacji liczby danych przy zachowaniu jakości krzywej.
+            </div>
+
+            <h3>1.2 Zastosowania</h3>
+            <ul>
+                <li><strong>Grafika komputerowa:</strong> Rysowanie gładkich krzywych i konturów</li>
+                <li><strong>Projektowanie CAD:</strong> Modelowanie płynnych kształtów</li>
+                <li><strong>Animacja:</strong> Tworzenie ścieżek ruchu obiektów</li>
+                <li><strong>Analiza danych:</strong> Interpolacja wartości pomiędzy pomiarami</li>
+                <li><strong>Wizualizacja:</strong> Generowanie estetycznych reprezentacji graficznych</li>
+            </ul>
+
+            <h3>1.3 Struktura Plików Projektu</h3>
+            <div class="file-structure">
+📁 Projekt NIFS3
+├── 📄 nifs3.py              - Implementacja algorytmu NIFS3
+├── 📄 point_selector.py     - Interaktywny edytor punktów kontrolnych
+├── 📄 point_optimiser.py    - Optymalizacja krzywych
+├── 📄 image_creator.py      - Generator obrazów PNG
+├── 📄 summary.py            - Generator podsumowań statystycznych
+├── 📄 run.py                - Główny skrypt uruchamiający
+├── 📄 background.png        - Tło dla edytora punktów
+├── 📄 points.txt            - Plik z punktami kontrolnymi
+├── 📄 konkurs-352890-dane.txt        - Zoptymalizowane dane
+├── 📄 konkurs-352890-podsumowanie.txt - Podsumowanie
+├── 📄 konkurs-352890.png             - Wynikowy obraz
+├── 📄 algorytm-momenty-NIFS3.pdf     - Dokumentacja algorytmu
+└── 📄 twierdzenie-NIFS3.pdf          - Podstawy teoretyczne
+            </div>
+        </section>
+
+        <section id="teoria" class="content-section">
+            <h2>2. Teoria Matematyczna</h2>
+
+            <h3>2.1 Funkcje Sklejane (Spline Functions)</h3>
+            <p>Funkcja sklejana stopnia <span class="math-notation">n</span> to funkcja kawałkami wielomianowa, która dla przedziału [<span class="math-notation">a, b</span>] podzielonego punktami węzłowymi <span class="math-notation">t₀ < t₁ < ... < t_k</span> spełnia następujące warunki:</p>
+            
+            <ul>
+                <li>Na każdym podprzedziale [<span class="math-notation">t_i, t_{i+1}</span>] jest wielomianem stopnia co najwyżej <span class="math-notation">n</span></li>
+                <li>Posiada ciągłe pochodne do rzędu <span class="math-notation">n-1</span> w całym przedziale [<span class="math-notation">a, b</span>]</li>
+                <li>Przechodzi przez zadane punkty kontrolne</li>
+            </ul>
+
+            <h3>2.2 Kubiczne Spline'y (Cubic Splines)</h3>
+            <p>W przypadku NIFS3 używamy spline'ów stopnia 3 (kubicznych). Dla <span class="math-notation">k+1</span> punktów węzłowych definiujemy <span class="math-notation">k</span> segmentów krzywej.</p>
+
+            <h4>2.2.1 Postać Parametryczna Segmentu</h4>
+            <p>Każdy segment <span class="math-notation">i</span> (dla <span class="math-notation">i = 0, 1, ..., k-1</span>) opisany jest wielomianem trzeciego stopnia:</p>
+            
+            <div class="formula">
+S_i(u) = a_i + b_i·Δu + c_i·Δu² + d_i·Δu³
+
+gdzie:
+- u ∈ [t_i, t_{i+1}] - parametr krzywej
+- Δu = u - t_i - odległość od początku segmentu
+- a_i, b_i, c_i, d_i - współczynniki wielomianu dla segmentu i
+            </div>
+
+            <h4>2.2.2 Warunki Ciągłości</h4>
+            <p>Aby krzywa była gładka, muszą być spełnione następujące warunki:</p>
+            
+            <div class="formula">
+1. Ciągłość funkcji (C⁰):
+   S_i(t_{i+1}) = S_{i+1}(t_{i+1}) dla i = 0, ..., k-2
+
+2. Ciągłość pierwszej pochodnej (C¹):
+   S'_i(t_{i+1}) = S'_{i+1}(t_{i+1}) dla i = 0, ..., k-2
+
+3. Ciągłość drugiej pochodnej (C²):
+   S''_i(t_{i+1}) = S''_{i+1}(t_{i+1}) dla i = 0, ..., k-2
+            </div>
+
+            <h3>2.3 Naturalne Warunki Brzegowe</h3>
+            <p>NIFS3 używa <strong>naturalnych warunków brzegowych</strong>, co oznacza, że druga pochodna na końcach krzywej wynosi zero:</p>
+            
+            <div class="formula">
+S''_0(t_0) = 0
+S''_{k-1}(t_k) = 0
+            </div>
+
+            <div class="info-box">
+                <strong>Znaczenie fizyczne:</strong> Naturalne warunki brzegowe odpowiadają fizycznej linijce elastycznej, która nie jest zginana na końcach. Krzywa przechodzi "naturalnie" przez punkty bez wymuszonych zakrzywień.
+            </div>
+
+            <h3>2.4 Układ Równań</h3>
+            <p>Wyznaczenie współczynników sprowadza się do rozwiązania układu równań liniowych. Dla współczynników <span class="math-notation">c_i</span> (związanych z drugą pochodną) otrzymujemy układ trójdiagonalny:</p>
+
+            <div class="formula">
+h_{i-1}·c_{i-1} + 2(h_{i-1} + h_i)·c_i + h_i·c_{i+1} = 3·[Δ_i - Δ_{i-1}]
+
+gdzie:
+- h_i = t_{i+1} - t_i (długość segmentu i)
+- Δ_i = (y_{i+1} - y_i) / h_i (różnica dzielona)
+- c_0 = c_k = 0 (warunki brzegowe)
+            </div>
+
+            <h3>2.5 Algorytm Thomasa (Thomas Algorithm)</h3>
+            <p>Układ trójdiagonalny rozwiązujemy efektywnie algorytmem Thomasa (znanym również jako algorytm "pogoni"). Składa się on z dwóch faz:</p>
+
+            <h4>2.5.1 Faza Forward (Eliminacja w przód)</h4>
+            <div class="formula">
+Dla i = 1, 2, ..., k-1:
+    l_i = 2(h_{i-1} + h_i) - h_{i-1}·u_{i-1}
+    u_i = h_i / l_i
+    z_i = (3·[Δ_i - Δ_{i-1}] - h_{i-1}·z_{i-1}) / l_i
+            </div>
+
+            <h4>2.5.2 Faza Backward (Podstawianie wstecz)</h4>
+            <div class="formula">
+c_k = 0
+Dla i = k-1, k-2, ..., 0:
+    c_i = z_i - u_i·c_{i+1}
+            </div>
+
+            <h3>2.6 Wyznaczanie Pozostałych Współczynników</h3>
+            <p>Po obliczeniu współczynników <span class="math-notation">c_i</span>, pozostałe współczynniki wyznaczamy ze wzorów:</p>
+
+            <div class="formula">
+a_i = y_i
+
+b_i = (y_{i+1} - y_i) / h_i - h_i·(c_{i+1} + 2·c_i) / 3
+
+d_i = (c_{i+1} - c_i) / (3·h_i)
+            </div>
+
+            <h3>2.7 Parametryzacja według Długości Łuku</h3>
+            <p>W projekcie NIFS3 stosujemy parametryzację proporcjonalną do długości łuku łamanej łączącej punkty kontrolne. Dla punktów (x_i, y_i) parametr t_i wyznaczamy jako:</p>
+
+            <div class="formula">
+t_0 = 0
+t_i = t_{i-1} + √[(x_i - x_{i-1})² + (y_i - y_{i-1})²] / L
+
+gdzie L = Σ√[(x_i - x_{i-1})² + (y_i - y_{i-1})²] (całkowita długość)
+            </div>
+
+            <div class="success-box">
+                <strong>Zaleta tej parametryzacji:</strong> Zapewnia równomierny rozkład punktów na krzywej, co skutkuje bardziej naturalnymi i gładkimi kształtami.
+            </div>
+        </section>
+
+        <section id="algorytm" class="content-section">
+            <h2>3. Szczegółowy Opis Algorytmu NIFS3</h2>
+
+            <h3>3.1 Funkcja NIFS3</h3>
+            <p>Główna funkcja implementująca algorytm obliczania współczynników kubicznych spline'ów.</p>
+
+            <h4>3.1.1 Sygnatura Funkcji</h4>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">NIFS3</span>(param_t, data_values):
+    <span class="comment"># param_t: lista parametrów węzłowych t_i (znormalizowane 0-1)</span>
+    <span class="comment"># data_values: lista wartości (współrzędne x lub y) w punktach węzłowych</span>
+    <span class="comment"># Zwraca: krotka (coeff_a, coeff_b, coeff_c, coeff_d)</span>
+            </div>
+
+            <h4>3.1.2 Inicjalizacja Struktur Danych</h4>
+            <div class="code-block">
+segment_count = len(data_values) - 1  <span class="comment"># Liczba segmentów = n-1</span>
+
+<span class="comment"># Oblicz długości segmentów h_i = t_{i+1} - t_i</span>
+intervals = [param_t[idx] - param_t[idx-1] 
+             <span class="keyword">for</span> idx <span class="keyword">in</span> range(1, segment_count+1)]
+
+<span class="comment"># Inicjalizacja tablic dla algorytmu Thomasa</span>
+delta_k = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count)]
+diagonal = [1 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count+1)]
+upper_diag = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count)]
+solution_q = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count+1)]
+            </div>
+
+            <h4>3.1.3 Obliczanie Prawych Stron Układu</h4>
+            <p>Wyznaczamy wartości delta_k, które reprezentują prawą stronę układu równań dla współczynników c_i:</p>
+
+            <div class="code-block">
+<span class="keyword">for</span> idx <span class="keyword">in</span> range(1, segment_count):
+    delta_k[idx] = (3 / intervals[idx]) * (data_values[idx + 1] - data_values[idx]) - \
+                   (3 / intervals[idx - 1]) * (data_values[idx] - data_values[idx - 1])
+            </div>
+
+            <div class="formula">
+Matematycznie odpowiada to wzorowi:
+δ_i = 3·[(y_{i+1} - y_i) / h_i - (y_i - y_{i-1}) / h_{i-1}]
+            </div>
+
+            <h4>3.1.4 Eliminacja w Przód (Forward Elimination)</h4>
+            <p>Pierwsza faza algorytmu Thomasa - przekształcamy macierz do postaci górnotrójkątnej:</p>
+
+            <div class="code-block">
+<span class="keyword">for</span> idx <span class="keyword">in</span> range(1, segment_count):
+    <span class="comment"># Aktualizacja diagonali</span>
+    diagonal[idx] = 2 * (param_t[idx + 1] - param_t[idx - 1]) - \
+                    intervals[idx - 1] * upper_diag[idx - 1]
+    
+    <span class="comment"># Oblicz współczynnik górnej przekątnej</span>
+    upper_diag[idx] = intervals[idx] / diagonal[idx]
+    
+    <span class="comment"># Aktualizuj rozwiązanie pośrednie</span>
+    solution_q[idx] = (delta_k[idx] - intervals[idx - 1] * solution_q[idx - 1]) / diagonal[idx]
+            </div>
+
+            <div class="info-box">
+                <strong>Uwaga:</strong> diagonal[idx] reprezentuje zmodyfikowany element diagonalny po eliminacji Gaussa. upper_diag[idx] to znormalizowany element nad przekątną.
+            </div>
+
+            <h4>3.1.5 Podstawianie Wstecz (Back Substitution)</h4>
+            <p>Druga faza algorytmu Thomasa - wyznaczamy współczynniki c_i oraz pozostałe współczynniki:</p>
+
+            <div class="code-block">
+<span class="comment"># Inicjalizacja tablic współczynników</span>
+coeff_c = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count+1)]
+coeff_b = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count)]
+coeff_d = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count)]
+coeff_a = [0 <span class="keyword">for</span> idx <span class="keyword">in</span> range(segment_count)]
+
+<span class="keyword">for</span> seg_idx <span class="keyword">in</span> range(segment_count - 1, -1, -1):
+    <span class="comment"># a_i = y_i (wartość w punkcie początkowym segmentu)</span>
+    coeff_a[seg_idx] = data_values[seg_idx]
+    
+    <span class="comment"># c_i = z_i - u_i * c_{i+1} (podstawienie wstecz)</span>
+    coeff_c[seg_idx] = solution_q[seg_idx] - upper_diag[seg_idx] * coeff_c[seg_idx + 1]
+    
+    <span class="comment"># b_i z warunku ciągłości pierwszej pochodnej</span>
+    coeff_b[seg_idx] = (data_values[seg_idx + 1] - data_values[seg_idx]) / intervals[seg_idx] - \
+                       intervals[seg_idx] * (coeff_c[seg_idx + 1] + 2 * coeff_c[seg_idx]) / 3
+    
+    <span class="comment"># d_i z warunku ciągłości drugiej pochodnej</span>
+    coeff_d[seg_idx] = (coeff_c[seg_idx + 1] - coeff_c[seg_idx]) / (3 * intervals[seg_idx])
+
+<span class="keyword">return</span> coeff_a, coeff_b, coeff_c, coeff_d
+            </div>
+
+            <h3>3.2 Funkcja compute</h3>
+            <p>Oblicza wartość funkcji sklejanej dla zadanego parametru.</p>
+
+            <h4>3.2.1 Implementacja</h4>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">compute</span>(param_value, knot_points, coeff_a, coeff_b, coeff_c, coeff_d):
+    <span class="comment"># Znajdź segment zawierający param_value</span>
+    <span class="keyword">for</span> segment_idx <span class="keyword">in</span> range(len(knot_points) - 1):
+        <span class="keyword">if</span> knot_points[segment_idx] <= param_value < knot_points[segment_idx + 1]:
+            <span class="comment"># Oblicz odległość od początku segmentu</span>
+            time_delta = param_value - knot_points[segment_idx]
+            
+            <span class="comment"># Wzór Hornera dla wielomianu stopnia 3</span>
+            <span class="keyword">return</span> coeff_a[segment_idx] + \
+                   coeff_b[segment_idx] * time_delta + \
+                   coeff_c[segment_idx] * time_delta**2 + \
+                   coeff_d[segment_idx] * time_delta**3
+    
+    <span class="comment"># Wartość poza zakresem</span>
+    <span class="keyword">return</span> None
+            </div>
+
+            <h4>3.2.2 Analiza Złożoności</h4>
+            <div class="formula">
+Złożoność czasowa:
+- NIFS3: O(n) - liniowa względem liczby punktów
+- compute: O(n) w najgorszym przypadku (wyszukiwanie liniowe)
+
+Złożoność pamięciowa:
+- NIFS3: O(n) - tablice współczynników
+- compute: O(1) - stała ilość pamięci
+            </div>
+
+            <div class="warning-box">
+                <strong>Możliwa optymalizacja:</strong> Wyszukiwanie segmentu w funkcji compute można zoptymalizować do O(log n) używając wyszukiwania binarnego, ponieważ punkty węzłowe są posortowane.
+            </div>
+
+            <h3>3.3 Właściwości Algorytmu</h3>
+            <ul>
+                <li><strong>Stabilność numeryczna:</strong> Algorytm Thomasa jest stabilny dla macierzy trójdiagonalnych z dominacją diagonalną</li>
+                <li><strong>Dokładność:</strong> Błąd interpolacji jest rzędu O(h⁴), gdzie h to maksymalna długość segmentu</li>
+                <li><strong>Gładkość:</strong> Gwarantowana ciągłość C² w całym zakresie</li>
+                <li><strong>Unikalność:</strong> Dla zadanych punktów i warunków brzegowych rozwiązanie jest jednoznaczne</li>
+            </ul>
+        </section>
+
+        <section id="moduły" class="content-section">
+            <h2>4. Dokumentacja Modułów</h2>
+
+            <h3>4.1 Moduł: nifs3.py</h3>
+            <p>Podstawowy moduł zawierający implementację algorytmu NIFS3.</p>
+
+            <h4>Funkcje:</h4>
+            <table>
+                <tr>
+                    <th>Funkcja</th>
+                    <th>Parametry</th>
+                    <th>Zwraca</th>
+                    <th>Opis</th>
+                </tr>
+                <tr>
+                    <td><code>NIFS3</code></td>
+                    <td>param_t: list[float]<br>data_values: list[float]</td>
+                    <td>tuple(list, list, list, list)</td>
+                    <td>Oblicza współczynniki a, b, c, d dla wszystkich segmentów spline</td>
+                </tr>
+                <tr>
+                    <td><code>compute</code></td>
+                    <td>param_value: float<br>knot_points: list[float]<br>coeff_a/b/c/d: list[float]</td>
+                    <td>float | None</td>
+                    <td>Oblicza wartość spline dla zadanego parametru u</td>
+                </tr>
+            </table>
+
+            <h3>4.2 Moduł: point_selector.py</h3>
+            <p>Interaktywny edytor umożliwiający manualny wybór punktów kontrolnych na obrazie tła.</p>
+
+            <h4>Klasa PointSelector:</h4>
+            <table>
+                <tr>
+                    <th>Metoda</th>
+                    <th>Opis</th>
+                </tr>
+                <tr>
+                    <td><code>__init__(bg_path)</code></td>
+                    <td>Inicjalizuje edytor z podaną ścieżką do obrazu tła</td>
+                </tr>
+                <tr>
+                    <td><code>render_curve(pts)</code></td>
+                    <td>Rysuje krzywą spline przez podane punkty używając NIFS3</td>
+                </tr>
+                <tr>
+                    <td><code>handle_mouse_click(event)</code></td>
+                    <td>Obsługuje kliknięcia myszą: LPM - dodaj punkt, PPM - usuń ostatni punkt</td>
+                </tr>
+                <tr>
+                    <td><code>handle_keypress(event)</code></td>
+                    <td>Obsługuje naciśnięcia klawiszy: 'c' - wyczyść plik points.txt</td>
+                </tr>
+                <tr>
+                    <td><code>refresh_display()</code></td>
+                    <td>Odświeża widok edytora z aktualnymi punktami i krzywą</td>
+                </tr>
+                <tr>
+                    <td><code>run_editor()</code></td>
+                    <td>Uruchamia interaktywny edytor punktów</td>
+                </tr>
+                <tr>
+                    <td><code>save_to_file()</code></td>
+                    <td>Zapisuje punkty i parametry do pliku points.txt</td>
+                </tr>
+            </table>
+
+            <h4>Stałe:</h4>
+            <ul>
+                <li><code>BACKGROUND_IMAGE</code> = "background.png" - ścieżka do obrazu tła</li>
+                <li><code>SAMPLE_COUNT</code> = 600 - liczba próbek na krzywej</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>Format zapisu w points.txt:</strong><br>
+                Każda linia zawiera: x:= [lista], y:= [lista], t:= [lista], u:= [lista]<br>
+                Kodowanie: UTF-16 z separatorem linii \r\n
+            </div>
+
+            <h3>4.3 Moduł: point_optimiser.py</h3>
+            <p>Optymalizuje krzywe poprzez usuwanie zbędnych punktów przy zachowaniu dokładności wizualnej.</p>
+
+            <h4>Klasa PointOptimiser:</h4>
+            <table>
+                <tr>
+                    <th>Metoda</th>
+                    <th>Opis</th>
+                </tr>
+                <tr>
+                    <td><code>__init__(input_path, output_path)</code></td>
+                    <td>Inicjalizuje optymalizator ze ścieżkami plików wejściowych i wyjściowych</td>
+                </tr>
+                <tr>
+                    <td><code>optimise()</code></td>
+                    <td>Wykonuje pełny proces optymalizacji</td>
+                </tr>
+            </table>
+
+            <h4>Algorytm Optymalizacji:</h4>
+            <ol>
+                <li><strong>Usuwanie duplikatów pikseli:</strong>
+                    <ul>
+                        <li>Oblicza pozycje pikseli dla wszystkich wartości parametru u</li>
+                        <li>Używa zbioru (set) do śledzenia już narysowanych pikseli</li>
+                        <li>Zachowuje tylko pierwszy parametr u dla każdego unikalnego piksela</li>
+                    </ul>
+                </li>
+                <li><strong>Wykrywanie punktów współliniowych:</strong>
+                    <ul>
+                        <li>Dla linii poziomych (p1_x == p2_x): sprawdza wszystkie piksele między p1_y a p2_y</li>
+                        <li>Dla linii ukośnych: używa wzoru na nachylenie slope = (p2_y - p1_y) / (p2_x - p1_x)</li>
+                        <li>Iteruje przez punkty pośrednie i dodaje do zbioru współliniowych</li>
+                    </ul>
+                </li>
+                <li><strong>Finalna selekcja:</strong>
+                    <ul>
+                        <li>Zachowuje tylko punkty, które nie są współliniowe</li>
+                        <li>Tworzy zoptymalizowaną listę parametrów u</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="success-box">
+                <strong>Efekty optymalizacji:</strong> Redukcja liczby punktów o 30-70% przy zachowaniu wizualnej identyczności krzywej. Znaczące zmniejszenie rozmiaru pliku danych i przyspieszenie renderowania.
+            </div>
+
+            <h3>4.4 Moduł: image_creator.py</h3>
+            <p>Generuje obraz PNG z krzywymi spline na podstawie zoptymalizowanych danych.</p>
+
+            <h4>Klasa ImageCreator:</h4>
+            <table>
+                <tr>
+                    <th>Metoda</th>
+                    <th>Parametry</th>
+                    <th>Opis</th>
+                </tr>
+                <tr>
+                    <td><code>__init__</code></td>
+                    <td>input_path, output_path,<br>canvas_width, canvas_height,<br>color_palette, line_width</td>
+                    <td>Inicjalizuje generator z parametrami płótna i stylu</td>
+                </tr>
+                <tr>
+                    <td><code>_setup_canvas()</code></td>
+                    <td>-</td>
+                    <td>Konfiguruje płótno matplotlib bez osi i marginesów</td>
+                </tr>
+                <tr>
+                    <td><code>_draw_curves()</code></td>
+                    <td>-</td>
+                    <td>Rysuje wszystkie krzywe z pliku danych</td>
+                </tr>
+                <tr>
+                    <td><code>save()</code></td>
+                    <td>-</td>
+                    <td>Zapisuje obraz do pliku PNG</td>
+                </tr>
+                <tr>
+                    <td><code>show()</code></td>
+                    <td>-</td>
+                    <td>Wyświetla obraz w oknie podglądu</td>
+                </tr>
+                <tr>
+                    <td><code>run()</code></td>
+                    <td>-</td>
+                    <td>Wykonuje pełny proces: setup, rysowanie, zapis, wyświetlenie</td>
+                </tr>
+            </table>
+
+            <h4>Domyślne Parametry:</h4>
+            <ul>
+                <li><strong>canvas_width:</strong> 1732.0 px</li>
+                <li><strong>canvas_height:</strong> 363.0 px</li>
+                <li><strong>line_width:</strong> 0.75</li>
+                <li><strong>color_palette:</strong> 10 kolorów (zielony, turkusowy, czerwony, fioletowy, różowy, pomarańczowy, żółty, lawendowy, niebieski)</li>
+            </ul>
+
+            <h3>4.5 Moduł: summary.py</h3>
+            <p>Generuje statystyki dotyczące wygenerowanych danych.</p>
+
+            <h4>Klasa SummaryGenerator:</h4>
+            <table>
+                <tr>
+                    <th>Metoda</th>
+                    <th>Opis</th>
+                </tr>
+                <tr>
+                    <td><code>__init__(points_file, out_file)</code></td>
+                    <td>Inicjalizuje generator ze ścieżkami plików</td>
+                </tr>
+                <tr>
+                    <td><code>_find_bracket_content(s, start_pos)</code></td>
+                    <td>Znajduje zawartość najbliższych nawiasów kwadratowych</td>
+                </tr>
+                <tr>
+                    <td><code>_split_items(list_text)</code></td>
+                    <td>Dzieli tekst listy na poszczególne elementy</td>
+                </tr>
+                <tr>
+                    <td><code>_parse_and_count(text)</code></td>
+                    <td>Parsuje plik i zlicza rekordy oraz elementy</td>
+                </tr>
+                <tr>
+                    <td><code>generate()</code></td>
+                    <td>Generuje plik podsumowania</td>
+                </tr>
+            </table>
+
+            <h4>Format Wyjściowy:</h4>
+            <div class="formula">
+Format: {used_nifs3}, {total_t}, {total_sizes}
+
+gdzie:
+- used_nifs3: liczba użytych krzywych NIFS3
+- total_t: suma liczb punktów węzłowych (t) we wszystkich krzywych
+- total_sizes: całkowita liczba elementów (x + y + t + u)
+            </div>
+
+            <h3>4.6 Moduł: run.py</h3>
+            <p>Główny skrypt orkiestrujący cały proces.</p>
+
+            <h4>Kolejność Wykonania:</h4>
+            <div class="code-block">
+1. PointOptimiser().optimise()
+   <span class="comment">↓ Optymalizuje points.txt → konkurs-352890-dane.txt</span>
+
+2. ImageCreator().run()
+   <span class="comment">↓ Generuje konkurs-352890.png</span>
+
+3. SummaryGenerator().generate()
+   <span class="comment">↓ Tworzy konkurs-352890-podsumowanie.txt</span>
+            </div>
+        </section>
+
+        <section id="użycie" class="content-section">
+            <h2>5. Instrukcja Użycia</h2>
+
+            <h3>5.1 Wymagania Systemowe</h3>
+            <ul>
+                <li><strong>Python:</strong> 3.6 lub nowszy</li>
+                <li><strong>Biblioteki:</strong>
+                    <ul>
+                        <li>matplotlib (wizualizacja i grafika)</li>
+                        <li>numpy (operacje numeryczne)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>Instalacja Zależności:</h4>
+            <div class="code-block">
+pip install matplotlib numpy
+            </div>
+
+            <h3>5.2 Tworzenie Krzywych - Tryb Interaktywny</h3>
+            
+            <h4>Krok 1: Uruchomienie Edytora</h4>
+            <div class="code-block">
+python point_selector.py
+            </div>
+
+            <h4>Krok 2: Dodawanie Punktów</h4>
+            <ul>
+                <li><strong>Lewy przycisk myszy (LPM):</strong> Dodaje nowy punkt kontrolny</li>
+                <li><strong>Prawy przycisk myszy (PPM):</strong> Usuwa ostatnio dodany punkt</li>
+                <li><strong>Klawisz 'C':</strong> Czyści plik points.txt</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>Wskazówka:</strong> Punkty powinny być dodawane w kolejności, w jakiej mają tworzyć krzywą. Każde kliknięcie natychmiast aktualizuje podgląd krzywej.
+            </div>
+
+            <h4>Krok 3: Zamknięcie Edytora</h4>
+            <p>Po zamknięciu okna edytora punkty są automatycznie zapisywane do pliku <code>points.txt</code>.</p>
+
+            <h3>5.3 Generowanie Wynikowego Obrazu</h3>
+            
+            <h4>Opcja 1: Pełny Pipeline</h4>
+            <div class="code-block">
+python run.py
+            </div>
+            <p>Wykonuje:</p>
+            <ul>
+                <li>Optymalizację punktów</li>
+                <li>Generowanie obrazu PNG</li>
+                <li>Utworzenie podsumowania</li>
+            </ul>
+
+            <h4>Opcja 2: Kroki Osobno</h4>
+            <div class="code-block">
+<span class="comment"># Tylko optymalizacja</span>
+python point_optimiser.py
+
+<span class="comment"># Tylko generowanie obrazu</span>
+python image_creator.py
+
+<span class="comment"># Tylko podsumowanie</span>
+python summary.py
+            </div>
+
+            <h3>5.4 Parametryzacja i Dostosowanie</h3>
+
+            <h4>Zmiana Rozmiaru Płótna:</h4>
+            <div class="code-block">
+creator = ImageCreator(
+    canvas_width=2000.0,
+    canvas_height=500.0
+)
+            </div>
+
+            <h4>Zmiana Kolorów:</h4>
+            <div class="code-block">
+custom_colors = [<span class="string">'#FF0000'</span>, <span class="string">'#00FF00'</span>, <span class="string">'#0000FF'</span>]
+creator = ImageCreator(color_palette=custom_colors)
+            </div>
+
+            <h4>Zmiana Liczby Próbek:</h4>
+            <div class="code-block">
+<span class="comment"># W point_selector.py zmień SAMPLE_COUNT</span>
+SAMPLE_COUNT = 1000  <span class="comment"># Większa wartość = gładsza krzywa</span>
+            </div>
+
+            <h3>5.5 Przykład Kompletnego Workflow</h3>
+            <div class="code-block">
+<span class="comment"># 1. Utwórz nowy projekt z tłem</span>
+python point_selector.py
+<span class="comment">   → Dodaj punkty na obrazie tła</span>
+<span class="comment">   → Zamknij okno (punkty zapisane w points.txt)</span>
+
+<span class="comment"># 2. Przetwórz dane i wygeneruj obraz</span>
+python run.py
+<span class="comment">   → Optymalizacja punktów</span>
+<span class="comment">   → Generowanie konkurs-352890.png</span>
+<span class="comment">   → Utworzenie podsumowania</span>
+
+<span class="comment"># 3. Sprawdź wyniki</span>
+<span class="comment">   - konkurs-352890-dane.txt: zoptymalizowane dane</span>
+<span class="comment">   - konkurs-352890.png: finalny obraz</span>
+<span class="comment">   - konkurs-352890-podsumowanie.txt: statystyki</span>
+            </div>
+
+            <h3>5.6 Rozwiązywanie Problemów</h3>
+            <table>
+                <tr>
+                    <th>Problem</th>
+                    <th>Rozwiązanie</th>
+                </tr>
+                <tr>
+                    <td>Krzywa nie jest gładka</td>
+                    <td>Zwiększ SAMPLE_COUNT lub dodaj więcej punktów kontrolnych</td>
+                </tr>
+                <tr>
+                    <td>Plik points.txt jest pusty</td>
+                    <td>Upewnij się, że zamknąłeś okno edytora (nie użyłeś Ctrl+C)</td>
+                </tr>
+                <tr>
+                    <td>Błąd kodowania pliku</td>
+                    <td>Pliki używają kodowania UTF-16, sprawdź czy nie są uszkodzone</td>
+                </tr>
+                <tr>
+                    <td>Za dużo punktów po optymalizacji</td>
+                    <td>Algorytm zachowuje wszystkie punkty niezbędne dla dokładności wizualnej</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="przepływ" class="content-section">
+            <h2>6. Przepływ Danych i Architektura</h2>
+
+            <h3>6.1 Diagram Przepływu Danych</h3>
+            <div class="code-block">
+┌─────────────────────┐
+│  background.png     │
+│  (obraz tła)        │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  point_selector.py  │ ◄── Interakcja użytkownika
+│  (edytor punktów)   │     (LPM/PPM/klawiatura)
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│    points.txt       │
+│  (surowe punkty)    │
+│  Format: UTF-16     │
+│  x, y, t, u listy   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ point_optimiser.py  │
+│ - Usuwa duplikaty   │
+│ - Usuwa współliniowe│
+│ - Używa NIFS3       │
+└──────────┬──────────┘
+           │
+           ▼
+┌────────────────────────┐
+│ konkurs-352890-dane.txt│
+│ (zoptymalizowane dane) │
+└──────────┬─────────────┘
+           │
+           ├──────────────────┐
+           │                  │
+           ▼                  ▼
+┌─────────────────┐  ┌──────────────────┐
+│ image_creator.py│  │   summary.py     │
+│ - Renderuje PNG │  │ - Zlicza rekordy │
+│ - Używa NIFS3   │  │ - Zlicza elementy│
+└────────┬────────┘  └────────┬─────────┘
+         │                    │
+         ▼                    ▼
+┌──────────────────┐  ┌───────────────────────────┐
+│ konkurs-352890   │  │ konkurs-352890-           │
+│     .png         │  │   podsumowanie.txt        │
+│ (obraz wynikowy) │  │ (statystyki)              │
+└──────────────────┘  └───────────────────────────┘
+            </div>
+
+            <h3>6.2 Struktura Danych</h3>
+
+            <h4>6.2.1 Format points.txt i konkurs-352890-dane.txt:</h4>
+            <div class="formula">
+Każda linia reprezentuje jedną krzywą:
+x:= [x₀, x₁, ..., x_n], y:= [y₀, y₁, ..., y_n], t:= [t₀, t₁, ..., t_n], u:= [u₀, u₁, ..., u_m]
+
+gdzie:
+- x, y: współrzędne punktów kontrolnych (n+1 punktów)
+- t: parametry węzłowe znormalizowane do [0, 1] (n+1 wartości)
+- u: parametry do próbkowania krzywej (m+1 wartości, m >> n)
+            </div>
+
+            <h4>6.2.2 Relacje między Parametrami:</h4>
+            <ul>
+                <li><strong>t:</strong> Wyznaczane z długości segmentów między punktami kontrolnymi, znormalizowane</li>
+                <li><strong>u:</strong> Równomiernie rozłożone wartości w przedziale [0, 1] dla próbkowania</li>
+                <li><strong>Związek:</strong> u jest używane do obliczania punktów na krzywej przy współczynnikach wyznaczonych dla t</li>
+            </ul>
+
+            <h3>6.3 Współpraca Modułów</h3>
+
+            <h4>Moduł NIFS3 jako Rdzeń:</h4>
+            <p>Moduł <code>nifs3.py</code> jest używany przez:</p>
+            <ul>
+                <li><strong>point_selector.py:</strong> Do podglądu krzywej w czasie rzeczywistym</li>
+                <li><strong>point_optimiser.py:</strong> Do obliczania pozycji pikseli dla optymalizacji</li>
+                <li><strong>image_creator.py:</strong> Do renderowania finalnej krzywej</li>
+            </ul>
+
+            <h4>Zależności między Modułami:</h4>
+            <div class="code-block">
+nifs3.py (core)
+    ↑
+    │
+    ├── point_selector.py
+    ├── point_optimiser.py
+    └── image_creator.py
+
+run.py
+    ├── point_optimiser.py → nifs3.py
+    ├── image_creator.py → nifs3.py
+    └── summary.py (niezależny)
+            </div>
+
+            <h3>6.4 Wydajność i Optymalizacja</h3>
+
+            <h4>Analiza Wydajności:</h4>
+            <table>
+                <tr>
+                    <th>Operacja</th>
+                    <th>Złożoność</th>
+                    <th>Opis</th>
+                </tr>
+                <tr>
+                    <td>NIFS3 dla n punktów</td>
+                    <td>O(n)</td>
+                    <td>Algorytm Thomasa - liniowy</td>
+                </tr>
+                <tr>
+                    <td>Compute dla 1 punktu</td>
+                    <td>O(n)</td>
+                    <td>Wyszukiwanie liniowe segmentu</td>
+                </tr>
+                <tr>
+                    <td>Generowanie m próbek</td>
+                    <td>O(m·n)</td>
+                    <td>m wywołań compute</td>
+                </tr>
+                <tr>
+                    <td>Optymalizacja</td>
+                    <td>O(m·n + p²)</td>
+                    <td>m próbek + p² porównań pikseli</td>
+                </tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>Wąskie gardło:</strong> Dla dużej liczby punktów kontrolnych (n > 100) i próbek (m > 1000), proces optymalizacji może być czasochłonny ze względu na kwadratową złożoność wykrywania punktów współliniowych.
+            </div>
+
+            <h3>6.5 Możliwe Rozszerzenia</h3>
+            <ul>
+                <li><strong>Wyszukiwanie binarne w compute:</strong> Zmniejszenie złożoności do O(log n)</li>
+                <li><strong>Parallel processing:</strong> Przetwarzanie wielu krzywych równolegle</li>
+                <li><strong>Adaptacyjne próbkowanie:</strong> Więcej próbek w obszarach o dużym zakrzywieniu</li>
+                <li><strong>Inne warunki brzegowe:</strong> Cubic clamped spline, periodic spline</li>
+                <li><strong>Interpolacja 3D:</strong> Rozszerzenie na przestrzeń trójwymiarową</li>
+                <li><strong>GUI improvements:</strong> Edycja istniejących punktów, cofnij/ponów</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>7. Podsumowanie i Wnioski</h2>
+
+            <h3>7.1 Kluczowe Cechy Projektu</h3>
+            <div class="success-box">
+                <ul>
+                    <li>✓ Matematycznie precyzyjna implementacja algorytmu NIFS3</li>
+                    <li>✓ Gwarantowana gładkość C² krzywych</li>
+                    <li>✓ Efektywna optymalizacja punktów</li>
+                    <li>✓ Intuicyjny interfejs użytkownika</li>
+                    <li>✓ Modułowa architektura</li>
+                    <li>✓ Pełna dokumentacja kodu</li>
+                </ul>
+            </div>
+
+            <h3>7.2 Matematyczne Podstawy</h3>
+            <p>Projekt opiera się na solidnych fundamentach teorii funkcji sklejanych:</p>
+            <ul>
+                <li><strong>Algorytm Thomasa:</strong> Stabilny numerycznie dla układów trójdiagonalnych</li>
+                <li><strong>Naturalne warunki brzegowe:</strong> Minimalizacja energii krzywizny</li>
+                <li><strong>Parametryzacja według długości:</strong> Równomierne rozmieszczenie punktów</li>
+            </ul>
+
+            <h3>7.3 Praktyczne Zastosowania</h3>
+            <p>System NIFS3 doskonale sprawdza się w:</p>
+            <ul>
+                <li>Projektowaniu graficznym wymagającym gładkich krzywych</li>
+                <li>Wizualizacji danych naukowych</li>
+                <li>Animacji komputerowej</li>
+                <li>Systemach CAD/CAM</li>
+            </ul>
+
+            <h3>7.4 Rekomendacje</h3>
+            <div class="info-box">
+                <strong>Dla optymalnych wyników:</strong>
+                <ul>
+                    <li>Używaj 10-50 punktów kontrolnych dla typowych krzywych</li>
+                    <li>Ustaw SAMPLE_COUNT na 500-1000 dla dobrej jakości</li>
+                    <li>Rozmieszczaj punkty równomiernie wzdłuż krzywej</li>
+                    <li>Unikaj ostrych kątów między segmentami</li>
+                </ul>
+            </div>
+
+            <h3>7.5 Referencje Teoretyczne</h3>
+            <p>Projekt implementuje algorytmy opisane w dokumentach PDF dołączonych do repozytorium:</p>
+            <ul>
+                <li><code>twierdzenie-NIFS3.pdf</code> - podstawy teoretyczne funkcji sklejanych</li>
+                <li><code>algorytm-momenty-NIFS3.pdf</code> - szczegóły implementacyjne algorytmu momentów</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>Uwaga:</strong> Szczegółowe wzory matematyczne i dowody można znaleźć w dołączonych plikach PDF. Implementacja w kodzie Python jest wierna tym specyfikacjom.
+            </div>
+        </section>
+
+        <footer>
+            <p>Dokumentacja wygenerowana dla projektu NIFS3 - Analiza Numeryczna</p>
+            <p>© 2026 | Implementacja kubicznych spline'ów z naturalnymi warunkami brzegowymi</p>
+        </footer>
+    </div>
+</body>
+</html>
